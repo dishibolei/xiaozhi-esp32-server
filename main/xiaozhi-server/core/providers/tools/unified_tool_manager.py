@@ -1,5 +1,6 @@
 """统一工具管理器"""
 
+import copy
 from typing import Dict, List, Optional, Any
 from config.logger import setup_logging
 from plugins_func.register import Action, ActionResponse
@@ -49,7 +50,7 @@ class ToolManager:
     def get_function_descriptions(self) -> List[Dict[str, Any]]:
         """获取所有工具的函数描述（OpenAI格式）"""
         if self._cached_function_descriptions is not None:
-            return self._cached_function_descriptions
+            return copy.deepcopy(self._cached_function_descriptions)
 
         descriptions = []
         tools = self.get_all_tools()
@@ -57,7 +58,7 @@ class ToolManager:
             descriptions.append(tool_definition.description)
 
         self._cached_function_descriptions = descriptions
-        return descriptions
+        return copy.deepcopy(self._cached_function_descriptions)
 
     def has_tool(self, tool_name: str) -> bool:
         """检查是否存在指定工具"""
